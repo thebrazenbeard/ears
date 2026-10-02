@@ -99,18 +99,19 @@ Ears starts with six rules:
 - [Evaluation and falsification](docs/evaluation-v1.md)
 - [Roadmap](docs/roadmap.md)
 - [Source registry](research/source-registry.yaml)
+- [Model registry](research/model-registry.yaml)
 
 ## Current implementation
 
-V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 adds a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline.
+V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 added a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline. V0.4 adds an **optional, source-level WavLM adapter** that is fail-closed when its learned dependencies or exact runtime are unavailable.
 
 The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, higher-dimensional acoustic vectors, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
 
-See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), and [Prototype V0.3](docs/prototype-v0.3.md).
+See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), [Prototype V0.3](docs/prototype-v0.3.md), and [Prototype V0.4](docs/prototype-v0.4.md).
 
 ## Near-term build target
 
-The next useful Ears step should **not** train a foundation model. The adapter contract now exists; the next step is to integrate one optional continuous self-supervised speech encoder and one optional discrete speech-unit path, then compare them against transcript-only, cheap-prosody, and log-mel controls.
+The next useful Ears step should **not** train a foundation model. A source-level optional WavLM path now exists; the next step is to runtime-qualify an exact learned revision when intentionally enabled, add one optional discrete speech-unit path, and compare both against transcript-only, cheap-prosody, and log-mel controls.
 
 Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter training, or speech-language model.
 

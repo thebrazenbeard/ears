@@ -3,10 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from .counterfactual import compare_acoustic_counterfactual
 from .pipeline import inspect_wav
 from .serialization import write_artifact
+from .wavlm import OptionalDependencyUnavailable, WavLMAdapter
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -20,6 +22,17 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--out", type=Path, default=Path("ears-artifact"))
     inspect.add_argument("--frame-ms", type=float, default=20.0)
     inspect.add_argument("--hop-ms", type=float, default=10.0)
+    inspect.add_argument(
+        "--wavlm",
+        action="store_true",
+        help="add the optional learned WavLM representation channel",
+    )
+    inspect.add_argument(
+        "--wavlm-model",
+        default="microsoft/wavlm-base-plus",
+    )
+    inspect.add_argument("--wavlm-revision", default="main")
+    inspect.add_argument("--wavlm-device", default="cpu")
 
     compare = subparsers.add_parser(
         "compare",
@@ -34,11 +47,25 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "inspect":
-        timeline = inspect_wav(
-            args.input,
-            frame_ms=args.frame_ms,
-            hop_ms=args.hop_ms,
-        )
+        adapters = []
+        if args.wavlm:
+            adapters.append(
+                WavLMAdapter(
+                    model_id=args.wavlm_model,
+                    revision=args.wavlm_revision,
+                    device=args.wavlm_device,
+                )
+            )
+        try:
+            timeline = inspect_wav(
+                args.input,
+                frame_ms=args.frame_ms,
+                hop_ms=args.hop_ms,
+                extra_adapters=adapters,
+            )
+        except OptionalDependencyUnavailable as exc:
+            print(f"ears: {exc}", file=sys.stderr)
+            return 2
         manifest, evidence = write_artifact(timeline, args.out)
         print(
             json.dumps(

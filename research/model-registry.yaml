@@ -1,0 +1,22 @@
+schema: ears.model-registry.v1
+as_of: 2026-10-02
+models:
+  - id: wavlm-base-plus
+    provider: microsoft
+    hub: huggingface
+    model_id: microsoft/wavlm-base-plus
+    task: feature-extraction
+    adapter: ears.wavlm.WavLMAdapter
+    learned: true
+    transcript_required: false
+    required_sample_rate_hz: 16000
+    default_requested_revision: main
+    exact_revision_policy: qualification_requires_immutable_resolved_revision
+    observed_model_card_url: https://huggingface.co/microsoft/wavlm-base-plus
+    observed_preprocessor_url: https://huggingface.co/microsoft/wavlm-base-plus/blob/main/preprocessor_config.json
+    observed_remote_size: approximately_378_MB
+    local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_PRESENT
+    claim_ceiling: SOURCE_ADAPTER_IMPLEMENTED_NOT_RUNTIME_EXECUTED
+notes:
+  - "Registry presence is not installation, download, execution, or model-quality evidence."
+  - "A mutable hub branch such as main is not an exact qualification subject."
