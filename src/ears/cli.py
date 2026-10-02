@@ -8,7 +8,12 @@ import sys
 from .counterfactual import compare_acoustic_counterfactual
 from .pipeline import inspect_wav
 from .serialization import write_artifact
-from .wavlm import OptionalDependencyUnavailable, WavLMAdapter
+from .wavlm import (
+    DEFAULT_WAVLM_REVISION,
+    ModelPolicyError,
+    OptionalDependencyUnavailable,
+    WavLMAdapter,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -31,7 +36,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--wavlm-model",
         default="microsoft/wavlm-base-plus",
     )
-    inspect.add_argument("--wavlm-revision", default="main")
+    inspect.add_argument(
+        "--wavlm-revision",
+        default=DEFAULT_WAVLM_REVISION,
+    )
     inspect.add_argument("--wavlm-device", default="cpu")
 
     compare = subparsers.add_parser(
@@ -49,13 +57,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "inspect":
         adapters = []
         if args.wavlm:
-            adapters.append(
-                WavLMAdapter(
-                    model_id=args.wavlm_model,
-                    revision=args.wavlm_revision,
-                    device=args.wavlm_device,
+            try:
+                adapters.append(
+                    WavLMAdapter(
+                        model_id=args.wavlm_model,
+                        revision=args.wavlm_revision,
+                        device=args.wavlm_device,
+                    )
                 )
-            )
+            except ModelPolicyError as exc:
+                print(f"ears: {exc}", file=sys.stderr)
+                return 2
         try:
             timeline = inspect_wav(
                 args.input,

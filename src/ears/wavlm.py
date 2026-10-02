@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from hashlib import sha256
+import re
 from typing import Any
 
 from .adapters import AdapterMetadata
@@ -8,8 +9,16 @@ from .audio import PCMBuffer
 from .model import AudioSpan, EvidenceItem, EvidenceKind
 
 
+DEFAULT_WAVLM_REVISION = "4c66d4806a428f2e922ccfa1a962776e232d487b"
+_IMMUTABLE_REVISION = re.compile(r"^[0-9a-fA-F]{40}$")
+
+
 class OptionalDependencyUnavailable(RuntimeError):
     """Raised when an optional learned-representation backend is unavailable."""
+
+
+class ModelPolicyError(ValueError):
+    """Raised when learned-model provenance or loading policy is violated."""
 
 
 class WavLMAdapter:
@@ -20,7 +29,7 @@ class WavLMAdapter:
 
     metadata = AdapterMetadata(
         name="ears.wavlm",
-        version="0.4.0",
+        version="0.5.0",
         representation="wavlm_mean_pooled_hidden_state",
         learned=True,
         transcript_required=False,
@@ -30,16 +39,41 @@ class WavLMAdapter:
         self,
         *,
         model_id: str = "microsoft/wavlm-base-plus",
-        revision: str = "main",
+        revision: str = DEFAULT_WAVLM_REVISION,
         device: str = "cpu",
+        require_immutable_revision: bool = True,
     ) -> None:
+        if require_immutable_revision and not _IMMUTABLE_REVISION.fullmatch(revision):
+            raise ModelPolicyError(
+                "learned-model revision must be an immutable 40-hex commit"
+            )
         self.model_id = model_id
         self.revision = revision
         self.device = device
+        self.require_immutable_revision = require_immutable_revision
         self._processor: Any | None = None
         self._model: Any | None = None
         self._torch: Any | None = None
         self._resolved_revision: str | None = None
+
+    @property
+    def revision_binding(self) -> str:
+        if _IMMUTABLE_REVISION.fullmatch(self.revision):
+            return "EXACT_IMMUTABLE_REQUESTED_REVISION"
+        return "MUTABLE_EXPLORATORY_REVISION"
+
+    def processor_load_kwargs(self) -> dict[str, object]:
+        return {
+            "revision": self.revision,
+            "trust_remote_code": False,
+        }
+
+    def model_load_kwargs(self) -> dict[str, object]:
+        return {
+            "revision": self.revision,
+            "trust_remote_code": False,
+            "use_safetensors": True,
+        }
 
     @staticmethod
     def _stable_id(*parts: object) -> str:
@@ -60,11 +94,11 @@ class WavLMAdapter:
 
         processor = AutoProcessor.from_pretrained(
             self.model_id,
-            revision=self.revision,
+            **self.processor_load_kwargs(),
         )
         model = AutoModel.from_pretrained(
             self.model_id,
-            revision=self.revision,
+            **self.model_load_kwargs(),
         )
         model.to(self.device)
         model.eval()
@@ -134,7 +168,7 @@ class WavLMAdapter:
                         "revision_binding": (
                             "EXACT_RESOLVED_REVISION"
                             if self._resolved_revision
-                            else "REQUESTED_REVISION_ONLY"
+                            else self.revision_binding
                         ),
                         "sampling_rate": buffer.sample_rate,
                         "device": self.device,

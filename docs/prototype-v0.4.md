@@ -43,8 +43,8 @@ Therefore V0.4 is source-level implementation plus fail-closed tests, not a succ
 
 > **HOSTILE REVIEWER:** Using a mutable revision named main undermines reproducibility.
 
-**ACCEPTED.** The adapter records both requested and resolved revisions. Qualification should use an immutable commit revision; main is convenience-only and cannot by itself establish a frozen result.
+**ACCEPTED AND SUPERSEDED BY V0.5.** V0.5 pins the default WavLM revision to an exact provider commit and rejects mutable revisions by default.
 
 ## Next frontier
 
-Execute WavLM in an isolated environment only when the dependency/model download is intentionally authorized, then add a discrete speech-unit adapter and compare both against log-mel and cheap-prosody controls.
+See V0.5. The current Microsoft WavLM upstream publishes pickle weights without safetensors, so Ears' hardened safe-loading policy blocks that runtime path until a safe artifact or separately qualified conversion path exists.

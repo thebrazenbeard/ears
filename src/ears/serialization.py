@@ -38,6 +38,8 @@ def write_artifact(
         "evidence_kind_counts": timeline.kind_counts(),
         "raw_audio_copied": False,
         "transcript_required": False,
+        "source_trust": "UNTRUSTED_AUDIO_CONTENT",
+        "control_authority": "NONE",
     }
     manifest_path = target / "manifest.json"
     evidence_path = target / "evidence.jsonl"

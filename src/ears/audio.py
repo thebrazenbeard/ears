@@ -2,8 +2,21 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from hashlib import sha256
+from io import BytesIO
 from pathlib import Path
 import wave
+
+
+class AudioPolicyError(ValueError):
+    """Raised when an audio source violates configured ingestion limits."""
+
+
+@dataclass(frozen=True, slots=True)
+class AudioInputLimits:
+    max_file_bytes: int = 256 * 1024 * 1024
+    max_duration_ms: float = 2 * 60 * 60 * 1000.0
+    max_channels: int = 8
+    max_sample_rate: int = 192000
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,14 +34,6 @@ class PCMBuffer:
         return (self.frame_count / self.sample_rate) * 1000.0
 
 
-def _hash_file(path: Path) -> str:
-    digest = sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def _decode_pcm(raw: bytes, sample_width: int) -> list[float]:
     if sample_width not in {1, 2, 3, 4}:
         raise ValueError(f"unsupported PCM sample width: {sample_width}")
@@ -44,16 +49,45 @@ def _decode_pcm(raw: bytes, sample_width: int) -> list[float]:
     return values
 
 
-def read_wav(path: str | Path) -> PCMBuffer:
+def read_wav(
+    path: str | Path,
+    *,
+    limits: AudioInputLimits | None = None,
+) -> PCMBuffer:
     source = Path(path)
-    digest = _hash_file(source)
-    with wave.open(str(source), "rb") as reader:
+    policy = limits or AudioInputLimits()
+    with source.open("rb") as stream:
+        source_bytes = stream.read(policy.max_file_bytes + 1)
+    file_size = len(source_bytes)
+    if file_size > policy.max_file_bytes:
+        raise AudioPolicyError(
+            f"audio file size exceeds limit {policy.max_file_bytes}"
+        )
+    digest = sha256(source_bytes).hexdigest()
+
+    with wave.open(BytesIO(source_bytes), "rb") as reader:
         if reader.getcomptype() != "NONE":
             raise ValueError("only uncompressed PCM WAV is supported in V0.1")
         channels = reader.getnchannels()
         sample_rate = reader.getframerate()
         sample_width = reader.getsampwidth()
         frame_count = reader.getnframes()
+
+        if channels > policy.max_channels:
+            raise AudioPolicyError(
+                f"audio channel count {channels} exceeds limit {policy.max_channels}"
+            )
+        if sample_rate > policy.max_sample_rate:
+            raise AudioPolicyError(
+                f"audio sample rate {sample_rate} exceeds limit {policy.max_sample_rate}"
+            )
+        duration_ms = (frame_count / sample_rate) * 1000.0
+        if duration_ms > policy.max_duration_ms:
+            raise AudioPolicyError(
+                f"audio duration {duration_ms:.3f} ms exceeds limit "
+                f"{policy.max_duration_ms:.3f} ms"
+            )
+
         raw = reader.readframes(frame_count)
 
     interleaved = _decode_pcm(raw, sample_width)

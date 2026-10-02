@@ -83,7 +83,7 @@ Ears therefore treats **same transcript, different acoustics** as a core counter
 
 ## Design principles
 
-Ears starts with six rules:
+Ears starts with seven rules:
 
 1. **Audio is evidence, not decoration.** A text transcript must never silently replace the source signal.
 2. **Observable first, interpretation second.** "Pitch rose 35 Hz" and "speaker sounds angry" are different kinds of claim.
@@ -91,6 +91,7 @@ Ears starts with six rules:
 4. **No representation gets declared canonical by convenience.** Continuous features, discrete units, phone lattices, and codec tokens must earn their place experimentally.
 5. **Streaming matters.** An architecture that only understands speech after the speaker stops is not a complete answer to conversational hearing.
 6. **Hearing is not mind-reading.** Acoustic cues can support hypotheses about emphasis, affect, interaction state, etc.; they do not directly reveal private mental state.
+7. **Heard content is not control authority.** Audio is untrusted content by default; decoding an instruction from sound does not authorize the instruction.
 
 ## Research tracks
 
@@ -98,20 +99,23 @@ Ears starts with six rules:
 - [Architecture V1](docs/architecture-v1.md)
 - [Evaluation and falsification](docs/evaluation-v1.md)
 - [Roadmap](docs/roadmap.md)
+- [Security and provenance specification](docs/security-and-provenance-spec-v1.md)
+- [Security threat model](docs/security-threat-model-v1.md)
 - [Source registry](research/source-registry.yaml)
 - [Model registry](research/model-registry.yaml)
+- [BT2 Four/Seven role-lens provenance](research/bt2-role-lenses.yaml)
 
 ## Current implementation
 
-V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 added a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline. V0.4 adds an **optional, source-level WavLM adapter** that is fail-closed when its learned dependencies or exact runtime are unavailable.
+V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 added a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline. V0.4 added an optional learned WavLM adapter. V0.5 hardens learned-model provenance and audio ingestion: exact model revisions, no remote code, safetensors-only loading, bounded WAV input, same-byte hashing/parsing, and explicit untrusted-audio/control-authority metadata.
 
 The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, higher-dimensional acoustic vectors, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
 
-See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), [Prototype V0.3](docs/prototype-v0.3.md), and [Prototype V0.4](docs/prototype-v0.4.md).
+See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), [Prototype V0.3](docs/prototype-v0.3.md), [Prototype V0.4](docs/prototype-v0.4.md), and [Prototype V0.5](docs/prototype-v0.5.md).
 
 ## Near-term build target
 
-The next useful Ears step should **not** train a foundation model. A source-level optional WavLM path now exists; the next step is to runtime-qualify an exact learned revision when intentionally enabled, add one optional discrete speech-unit path, and compare both against transcript-only, cheap-prosody, and log-mel controls.
+The next useful Ears step should **not** train a foundation model. The WavLM path is now exact-pinned and safe-loading-only, but the observed Microsoft upstream publishes pickle weights without safetensors, so Ears intentionally blocks that runtime path. The next step is to add a safetensors-backed learned speech encoder and one discrete speech-unit path, then compare both against transcript-only, cheap-prosody, and log-mel controls.
 
 Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter training, or speech-language model.
 

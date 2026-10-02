@@ -158,6 +158,11 @@ class EvidenceTimelineTests(unittest.TestCase):
             )
             self.assertFalse(manifest["raw_audio_copied"])
             self.assertFalse(manifest["transcript_required"])
+            self.assertEqual(
+                manifest["source_trust"],
+                "UNTRUSTED_AUDIO_CONTENT",
+            )
+            self.assertEqual(manifest["control_authority"], "NONE")
 
     def test_evidence_payload_is_immutable_after_creation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

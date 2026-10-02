@@ -42,7 +42,7 @@ Implement pluggable channels:
 - deterministic VAD / silence / overlap timing;
 - F0, energy, duration, rate and pause features;
 - one continuous acoustic baseline (**V0.3 log-mel implemented**);
-- one continuous SSL encoder (**V0.4 WavLM source adapter implemented; runtime qualification pending**);
+- one continuous SSL encoder (**V0.5 WavLM adapter exact-pinned and hardened; safe runtime blocked by pickle-only upstream artifact**);
 - one discrete speech-unit path;
 - one ASR path.
 
