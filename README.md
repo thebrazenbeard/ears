@@ -102,18 +102,18 @@ Ears starts with six rules:
 
 ## Current implementation
 
-V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 adds a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness.
+V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 adds a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline.
 
-The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
+The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, higher-dimensional acoustic vectors, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
 
-See [Prototype V0.1](docs/prototype-v0.1.md) and [Prototype V0.2](docs/prototype-v0.2.md).
+See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), and [Prototype V0.3](docs/prototype-v0.3.md).
 
 ## Near-term build target
 
-The next useful Ears step should **not** train a foundation model. It should add pluggable representation adapters for one continuous self-supervised speech encoder and one discrete speech-unit path, then compare them against transcript-only and cheap-prosody controls.
+The next useful Ears step should **not** train a foundation model. The adapter contract now exists; the next step is to integrate one optional continuous self-supervised speech encoder and one optional discrete speech-unit path, then compare them against transcript-only, cheap-prosody, and log-mel controls.
 
 Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter training, or speech-language model.
 
 ## Claim boundary
 
-Ears currently contains a research architecture and evaluation program. It does **not** yet establish a working machine-hearing system, direct audio comprehension by Vera, consciousness, subjective hearing, or superiority to existing speech-language models.
+Ears currently contains a research architecture, early executable acoustic-evidence tooling, and an evaluation program. It does **not** yet establish a working machine-hearing system, direct audio comprehension by Vera, consciousness, subjective hearing, or superiority to existing speech-language models.

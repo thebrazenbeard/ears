@@ -41,6 +41,7 @@ Implement pluggable channels:
 
 - deterministic VAD / silence / overlap timing;
 - F0, energy, duration, rate and pause features;
+- one continuous acoustic baseline (**V0.3 log-mel implemented**);
 - one continuous SSL encoder;
 - one discrete speech-unit path;
 - one ASR path.

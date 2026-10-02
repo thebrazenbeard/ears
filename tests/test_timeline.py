@@ -127,6 +127,10 @@ class EvidenceTimelineTests(unittest.TestCase):
                 "USER_DECLARED_UNVERIFIED",
             )
             self.assertGreater(report["absolute_deltas"]["median_f0_hz"], 150.0)
+            self.assertGreater(
+                report["absolute_deltas"]["mean_continuous_vector_l2"],
+                0.0,
+            )
             self.assertEqual(
                 report["claim_ceiling"],
                 "ACOUSTIC_DIFFERENCE_ONLY_NOT_SEMANTIC_REASONING",
