@@ -1,0 +1,39 @@
+schema: ears.model-registry.v1
+as_of: 2026-10-02
+models:
+  - id: wavlm-base-plus
+    provider: microsoft
+    hub: huggingface
+    model_id: microsoft/wavlm-base-plus
+    task: feature-extraction
+    adapter: ears.wavlm.WavLMAdapter
+    learned: true
+    transcript_required: false
+    required_sample_rate_hz: 16000
+    pinned_revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+    revision_source:
+      git_ls_remote: 4c66d4806a428f2e922ccfa1a962776e232d487b
+      hub_api_sha: 4c66d4806a428f2e922ccfa1a962776e232d487b
+    load_policy:
+      trust_remote_code: false
+      require_immutable_revision: true
+      use_safetensors: true
+    observed_artifacts:
+      - .gitattributes
+      - README.md
+      - config.json
+      - preprocessor_config.json
+      - pytorch_model.bin
+    safetensors_present: false
+    pickle_pytorch_bin_present: true
+    safe_runtime_status: BLOCKED_BY_UPSTREAM_PICKLE_ONLY
+    observed_model_card_url: https://huggingface.co/microsoft/wavlm-base-plus
+    observed_api_url: https://huggingface.co/api/models/microsoft/wavlm-base-plus
+    local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_PRESENT
+    claim_ceiling: SOURCE_ADAPTER_HARDENED_NOT_RUNTIME_EXECUTED
+
+notes:
+  - "Registry presence is not installation, download, execution, or model-quality evidence."
+  - "The pinned provider revision is immutable source identity, not proof the weights are safe."
+  - "Current Ears policy will not silently fall back from safetensors to pickle."
+  - "Provider state is an observation at the recorded date and must be refreshed before runtime qualification."

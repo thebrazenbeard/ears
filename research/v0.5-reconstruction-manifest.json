@@ -1,0 +1,115 @@
+{
+  "base_main_head": "c313c41b2ae53488623d193ef664f1f14504189c",
+  "bound_paths": [
+    {
+      "operation": "UPDATE",
+      "path": "README.md",
+      "sha256": "c31957c1f80ed446fafef234dc78f05fd4cd2d400e39fda2875c8a6e021405b6"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "docs/prototype-v0.4.md",
+      "sha256": "b53be1188b27ac91ce0544390425dd47ed4f3f84219bdbc179b296cfd5ecb24b"
+    },
+    {
+      "operation": "CREATE",
+      "path": "docs/prototype-v0.5.md",
+      "sha256": "d66e6094891bfe148ba88b566bc373b8d4c30bb592feb68f8d1182d0b66e59d9"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "docs/roadmap.md",
+      "sha256": "7749bdc308d5450079865a710917678e4900f04aa8d8fbf9722324959b11bf7d"
+    },
+    {
+      "operation": "CREATE",
+      "path": "docs/security-and-provenance-spec-v1.md",
+      "sha256": "124fb8f5bd269a84522aab1af575557b997d064f2c0ebf003c56b22797fc80c7"
+    },
+    {
+      "operation": "CREATE",
+      "path": "docs/security-threat-model-v1.md",
+      "sha256": "bccaea645abe7a567c5b48b07628669579540e3f7e8ce661bbfaa8a8840948e6"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "pyproject.toml",
+      "sha256": "81314c71a3250ceb19d3c95a35755704790f87cb1bcb5c3d8a3af3e3762b2587"
+    },
+    {
+      "operation": "CREATE",
+      "path": "research/bt2-role-lenses.yaml",
+      "sha256": "1b62e43820b873d0a9161636406e164f7d03b19b698034cd76609eab4597e295"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "research/model-registry.yaml",
+      "sha256": "180d82969fcc3cfffa807ff12a83cf7a5e4ea7126cbb261aa150ea39fea74f3e"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "research/source-registry.yaml",
+      "sha256": "02861246ad210ea0ae9e6630b52d1e1607042f317dbebed8abe99d462558afc0"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/__init__.py",
+      "sha256": "afd9953164a078163815384957676b65fdf3bfb5f522a9a04304fcb2f865f314"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/audio.py",
+      "sha256": "4a9758c83b511b7a0b7f0804e98eb9e9c20868ecb77c42c00828b4b52bfe8851"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/cli.py",
+      "sha256": "2f2b9d5a9a146bf26dcc5bc001593f6509b9a86919a276cbed7cc7cf42021246"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/serialization.py",
+      "sha256": "5743715f20900b2170d58d1d0b6aa59ef0d291fe8772c7d8e7d666dab3f52dae"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/wavlm.py",
+      "sha256": "88c0ab9e5c324f7e87546aefc6b76dcaf49664d767b1c53adf5b56fad7e5d704"
+    },
+    {
+      "operation": "CREATE",
+      "path": "tests/test_security_policy.py",
+      "sha256": "c70570a3587f1df40d499471ab68e24a695c444bf54bdac2c80a7282f353da13"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "tests/test_timeline.py",
+      "sha256": "6da9efec7d875b2ef33a0ad5c468b5964b78f7577c9c97b30ecbb247880fafda"
+    }
+  ],
+  "branch": "research/native-acoustic-grounding-v1-20261002",
+  "bt2_method_source": {
+    "four": "archive/training-sources/build-team-2.0/four/v1.0.1",
+    "main_head": "8d9b07d165350c341538be56cdfc919b729fe96b",
+    "repository": "thebrazenbeard/bt2",
+    "review_mode": "INTERNAL_METHOD_LENS_NOT_INDEPENDENT_REVIEW",
+    "seven": "archive/training-sources/project-achilles/seven/v1.0.0"
+  },
+  "exclusions": [
+    "this manifest does not hash itself",
+    "internal Four/Seven lenses are not independent acceptance",
+    "no WavLM runtime execution occurred"
+  ],
+  "generated_date": "2026-10-02",
+  "predecessor_head": "2b72150be4ef8660c3054d83f9b33d2691c827fb",
+  "repository": "thebrazenbeard/ears",
+  "schema": "ears.four-reconstruction-manifest.v1",
+  "source_set_digest_sha256": "e4bef686af46bea005caab9b1871722481a0a61a25475a8ae98ae4809fa2df0a",
+  "verification_observed_before_manifest": {
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "unittest": "23/23 PASS",
+    "wheel": "ears_acoustic-0.5.0-py3-none-any.whl",
+    "wheel_sha256": "46317235a62a3452a59767cc4a74875376c8b54091a0ae06c958340b48781e0c"
+  }
+}

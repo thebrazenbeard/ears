@@ -1,0 +1,98 @@
+schema: ears.source-registry.v1
+as_of: 2026-10-02
+status: research_sources_not_runtime_dependencies
+sources:
+  - id: hubert
+    title: "HuBERT: Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units"
+    year: 2021
+    url: https://arxiv.org/abs/2106.07447
+    relevance: self_supervised_hidden_speech_units
+  - id: wavlm
+    title: "WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing"
+    year: 2021
+    url: https://arxiv.org/abs/2110.13900
+    relevance: continuous_full_stack_speech_representation
+  - id: speechtokenizer
+    title: "SpeechTokenizer: Unified Speech Tokenizer for Speech Large Language Models"
+    year: 2023
+    url: https://arxiv.org/abs/2308.16692
+    relevance: hierarchical_semantic_acoustic_tokens
+  - id: spirit-lm
+    title: "Spirit LM: Interleaved Spoken and Written Language Model"
+    year: 2024
+    url: https://arxiv.org/abs/2402.05755
+    relevance: phonetic_pitch_style_units_in_language_model
+  - id: qwen2-audio
+    title: "Qwen2-Audio Technical Report"
+    year: 2024
+    url: https://arxiv.org/abs/2407.10759
+    relevance: general_audio_language_understanding
+  - id: moshi
+    title: "Moshi: a speech-text foundation model for real-time dialogue"
+    year: 2024
+    url: https://arxiv.org/abs/2410.00037
+    relevance: streaming_full_duplex_speech_language_model
+  - id: audio-flamingo-3
+    title: "Audio Flamingo 3: Advancing Audio Intelligence with Fully Open Large Audio Language Models"
+    year: 2025
+    url: https://arxiv.org/abs/2507.08128
+    relevance: open_general_audio_reasoning
+  - id: discrete-vs-continuous
+    title: "Speech Discrete Tokens or Continuous Features? A Comparative Analysis for Spoken Language Understanding in SpeechLLMs"
+    year: 2025
+    url: https://arxiv.org/abs/2508.17863
+    relevance: representation_ablation
+  - id: cp-bench
+    title: "Benchmarking Contextual and Paralinguistic Reasoning in Speech-LLMs"
+    year: 2025
+    url: https://arxiv.org/abs/2509.16589
+    relevance: contextual_paralinguistic_evaluation
+  - id: paras2s
+    title: "ParaS2S: Benchmarking and Aligning Spoken Language Models for Paralinguistic-aware Speech-to-Speech Interaction"
+    year: 2025
+    url: https://arxiv.org/abs/2511.08723
+    relevance: speech_to_speech_paralinguistic_evaluation
+  - id: phonological-tokenizer
+    title: "Phonological Tokenizer: Prosody-Aware Phonetic Token via Multi-Objective Fine-Tuning with Differentiable K-Means"
+    year: 2026
+    url: https://arxiv.org/abs/2601.19781
+    relevance: phonological_tokens_with_prosody
+  - id: mimi-metalinguistic
+    title: "Using the Mimi codec for metalinguistic representations"
+    year: 2026
+    url: https://aclanthology.org/2026.brigap-1.7/
+    relevance: phone_and_subphone_structure_in_mimi_tokens
+  - id: para-llm
+    title: "ParA-LLM: A Unified Approach to Paralinguistic and Acoustic Speech Understanding"
+    year: 2026
+    url: https://arxiv.org/abs/2609.22771
+    relevance: paralinguistic_acoustic_benchmark_and_training
+  - id: audio-injection-emnlp
+    title: "Evaluating Robustness of Large Audio Language Models to Audio Injection: An Empirical Study"
+    year: 2025
+    url: https://aclanthology.org/2025.emnlp-main.1303/
+    relevance: audio_injection_security_evaluation
+  - id: trojanwave
+    title: "TrojanWave: Exploiting Prompt Learning for Stealthy Backdoor Attacks on Large Audio-Language Models"
+    year: 2025
+    url: https://aclanthology.org/2025.emnlp-main.940/
+    relevance: audio_backdoor_prompt_learning
+  - id: audiohijack
+    title: "Hijacking Large Audio-Language Models via Context-Agnostic and Imperceptible Auditory Prompt Injection"
+    year: 2026
+    url: https://arxiv.org/abs/2604.14604
+    relevance: imperceptible_auditory_prompt_injection
+  - id: hf-pickle-security
+    title: "Hugging Face Hub — Pickle Scanning"
+    year: 2026
+    url: https://huggingface.co/docs/hub/security-pickle
+    relevance: model_weight_deserialization_security
+  - id: owasp-prompt-injection
+    title: "OWASP LLM01:2025 Prompt Injection"
+    year: 2025
+    url: https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+    relevance: multimodal_prompt_injection_threat_model
+notes:
+  - "Presence in this registry does not imply endorsement, dependency, compatible license, or reproduced result."
+  - "Preprints and workshop papers must be distinguished from independently replicated evidence."
+  - "Licenses and exact model revisions must be checked before code or weights are adopted."
