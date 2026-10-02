@@ -25,9 +25,11 @@ That is a real limitation, not a cosmetic warning. Hugging Face documents that p
 
 ## Audio-ingestion hardening
 
-File-backed WAV ingestion now has default limits on file size, duration, channel count, and sample rate before complete PCM decode.
+File-backed WAV ingestion now has default limits on file size, duration, channel count, sample rate, and decoded sample count before float expansion.
 
-The source bytes are read once through a bounded read, hashed, and parsed from the exact same byte buffer. This closes the prior TOCTOU provenance defect where decoded PCM could come from one path state while the source hash came from a later replacement of that path.
+The source is copied through a bounded, hashing `SpooledTemporaryFile`: only a small prefix remains memory-resident before the spool rolls to disk, and parsing uses that exact captured snapshot. This closes the prior TOCTOU provenance defect where decoded PCM could come from one path state while the source hash came from a later replacement of that path, while avoiding a full configured-size source allocation in RAM.
+
+A post-review hostile also mutates the pathname during ingestion and was mutation-tested against a deliberately vulnerable reopen/hash sequence: the hostile failed the vulnerable mutant and passes the snapshot implementation.
 
 ## Control-authority boundary
 

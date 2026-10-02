@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import builtins
 from contextlib import redirect_stderr
-from io import StringIO
+from io import BytesIO, StringIO
 from pathlib import Path
 from hashlib import sha256
 import struct
@@ -104,23 +105,48 @@ class AudioInputPolicyTests(unittest.TestCase):
             replacement = Path(directory) / "replacement.wav"
             write_wav(replacement, seconds=0.1, sample_rate=16000)
             replacement_bytes = replacement.read_bytes()
+            real_path_open = Path.open
+            open_count = 0
 
-            def replace_during_legacy_hash(source: Path) -> str:
-                source.write_bytes(replacement_bytes)
-                return sha256(replacement_bytes).hexdigest()
+            class ReplacingStream(BytesIO):
+                replaced = False
 
-            with patch(
-                "ears.audio._hash_file",
-                side_effect=replace_during_legacy_hash,
-                create=True,
-            ):
+                def read(self, size: int = -1) -> bytes:
+                    data = super().read(size)
+                    if not self.replaced:
+                        with builtins.open(path, "wb") as target:
+                            target.write(replacement_bytes)
+                        self.replaced = True
+                    return data
+
+            def open_with_replacement(source: Path, *args, **kwargs):
+                nonlocal open_count
+                mode = args[0] if args else kwargs.get("mode", "r")
+                if source == path and mode == "rb" and open_count == 0:
+                    open_count += 1
+                    return ReplacingStream(original_bytes)
+                return real_path_open(source, *args, **kwargs)
+
+            with patch.object(Path, "open", new=open_with_replacement):
                 buffer = read_wav(path)
 
+            self.assertEqual(path.read_bytes(), replacement_bytes)
             self.assertEqual(
                 buffer.source_id,
                 "sha256:" + sha256(original_bytes).hexdigest(),
             )
             self.assertEqual(buffer.sample_rate, 8000)
+
+    def test_decoded_sample_limit_rejects_before_float_expansion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.wav"
+            write_wav(path, seconds=0.2, sample_rate=8000)
+            limits = AudioInputLimits(
+                max_file_bytes=1024 * 1024,
+                max_decoded_samples=100,
+            )
+            with self.assertRaisesRegex(AudioPolicyError, "decoded sample"):
+                read_wav(path, limits=limits)
 
     def test_duration_limit_rejects_input_before_pcm_decode(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

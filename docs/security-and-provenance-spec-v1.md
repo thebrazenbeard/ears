@@ -38,14 +38,17 @@ execute arbitrary code and recommends safetensors/safe loading.
 ## S3 — Audio input resource bounds
 
 **Requirement:** file-backed audio ingestion MUST reject inputs exceeding
-configured byte, duration, channel-count, or sample-rate limits before loading
-the complete PCM payload.
+configured byte, duration, channel-count, sample-rate, or decoded-sample limits
+before unbounded PCM-to-float expansion. Source hashing and parsing MUST bind to
+the same captured byte snapshot.
 
-**Acceptance:** each limit has a failing hostile test and a deterministic,
-fail-closed error.
+**Acceptance:** material resource limits have deterministic fail-closed hostiles;
+the decoded-sample hostile fails before float expansion; and a path-replacement
+hostile proves source identity remains bound to parsed bytes.
 
 **Forbidden:** allocating memory proportional to an attacker-controlled WAV
 header before validating the declared geometry.
+
 ## S4 — Acoustic content is untrusted data
 
 **Requirement:** acoustic evidence MUST NOT gain instruction authority merely
