@@ -73,7 +73,7 @@ Source: https://arxiv.org/abs/2407.10759
 Source: https://arxiv.org/abs/2507.08128  
 Implementation: https://github.com/NVIDIA/audio-flamingo
 
-**Implication:** "language reasoning over audio" is no longer speculative. The open problem is how much useful acoustic evidence survives and how reliably the model reasons over it.
+**Implication:** architectures can bypass an explicit orthographic transcript bottleneck. That is weaker than proving acoustic reasoning. An audio encoder may still compress speech into a latent representation dominated by lexical content — effectively a learned soft transcript. Ears must test what non-lexical acoustic information survives and whether downstream decisions causally depend on it.
 
 ### 2.4 Continuous versus discrete representations
 

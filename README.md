@@ -67,13 +67,19 @@ Several lines of work make the idea technically credible:
 - **SpeechTokenizer** and **Mimi** show that semantic/phonetic and acoustic information can be compressed into speech-token streams.
 - **Spirit LM** demonstrated a language model mixing text with speech units; its expressive variant explicitly adds pitch and style units.
 - **Moshi** showed real-time full-duplex dialogue over speech tokens, avoiding the classic ASR -> text LLM -> TTS bottleneck.
-- **Qwen2-Audio** and **Audio Flamingo 3** demonstrated general audio-language reasoning over speech and other sounds.
+- **Qwen2-Audio** and **Audio Flamingo 3** demonstrate architectures that accept audio-derived representations without requiring an explicit user-visible ASR transcript as the sole input bottleneck. That does **not** by itself prove that their internal representations preserve or causally use non-lexical acoustic information rather than behaving like a learned soft transcript.
 - A 2025 controlled comparison found continuous speech features generally stronger than discrete tokens across several spoken-language-understanding tasks, which argues against prematurely committing Ears to one tokenization scheme.
 - A 2026 **Phonological Tokenizer** paper explicitly targets phonetic tokens that retain linguistic **and prosodic** information while discarding some speaker identity.
 - A 2026 ACL workshop paper analyzing **Mimi** found its semantic tokens align with subphone, phone, biphone, triphone and quadphone realizations — unusually direct evidence that modern neural speech tokens can carry structure close to the "hear phonetically" intuition.
 - 2025–2026 paralinguistic benchmarks continue to show that strong audio-capable LLMs remain weak at reasoning over prosody, speaker-speech attributes, and acoustic context. The problem is not solved.
 
 See [docs/research-landscape.md](docs/research-landscape.md) for the source-bound review.
+
+### The distinction Ears must prove
+
+Bypassing an **explicit** speech-to-text component is necessary evidence, but it is not sufficient evidence of acoustic reasoning. An audio encoder could map speech into latent vectors that function mostly as an internal transcript.
+
+Ears therefore treats **same transcript, different acoustics** as a core counterfactual. If two recordings have identical words but materially different stress, timing, overlap, pronunciation, or non-speech context, a claimed acoustic reasoner must preserve the distinction and use it when the task requires it. A transcript-conflict probe should also test whether source audio can defeat a wrong text hypothesis rather than being silently overruled by it.
 
 ## Design principles
 

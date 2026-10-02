@@ -14,25 +14,26 @@ Done in this branch:
 
 ## Phase 1 — Evidence timeline prototype
 
-Build a local Python package that:
+**Partially implemented in V0.1.** The current package loads uncompressed PCM WAV audio, assigns content-addressed source identity, emits immutable time-bounded evidence items, computes deterministic frame-level acoustic observations, and serializes a portable manifest plus JSONL evidence stream.
 
-1. loads WAV/FLAC audio;
-2. normalizes/resamples while preserving source timing;
-3. emits immutable time spans;
-4. attaches multiple evidence streams to those spans;
-5. serializes a portable artifact.
+Still open in Phase 1:
+
+1. FLAC and broader audio decoding;
+2. resampling/normalization with explicit provenance;
+3. streaming/chunked ingestion instead of whole-file loading;
+4. multiple learned or phonological evidence streams;
+5. explicit revision semantics for incremental observations.
 
 No LLM is required yet.
 
-Suggested artifact:
+Current V0.1 artifact:
 
 ```
-ears.jsonl
-source.wav
 manifest.json
+evidence.jsonl
 ```
 
-Each record should identify the producer/model version and source span.
+The source audio is content-addressed but is **not copied by default**. Each evidence record identifies the producer/version and exact source span.
 
 ## Phase 2 — Baseline channels
 
