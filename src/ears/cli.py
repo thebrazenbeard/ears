@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .counterfactual import compare_acoustic_counterfactual
 from .pipeline import inspect_wav
 from .serialization import write_artifact
 
@@ -19,6 +20,14 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--out", type=Path, default=Path("ears-artifact"))
     inspect.add_argument("--frame-ms", type=float, default=20.0)
     inspect.add_argument("--hop-ms", type=float, default=10.0)
+
+    compare = subparsers.add_parser(
+        "compare",
+        help="compare two audio sources without treating lexical equivalence as verified",
+    )
+    compare.add_argument("left", type=Path)
+    compare.add_argument("right", type=Path)
+    compare.add_argument("--lexical-control", type=str, default=None)
     return parser
 
 
@@ -41,6 +50,21 @@ def main(argv: list[str] | None = None) -> int:
                     "manifest": str(manifest),
                     "evidence": str(evidence),
                 },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.command == "compare":
+        left = inspect_wav(args.left)
+        right = inspect_wav(args.right)
+        print(
+            json.dumps(
+                compare_acoustic_counterfactual(
+                    left,
+                    right,
+                    lexical_control=args.lexical_control,
+                ),
                 indent=2,
                 sort_keys=True,
             )

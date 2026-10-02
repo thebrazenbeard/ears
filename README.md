@@ -100,20 +100,19 @@ Ears starts with six rules:
 - [Roadmap](docs/roadmap.md)
 - [Source registry](research/source-registry.yaml)
 
+## Current implementation
+
+V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 adds a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness.
+
+The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
+
+See [Prototype V0.1](docs/prototype-v0.1.md) and [Prototype V0.2](docs/prototype-v0.2.md).
+
 ## Near-term build target
 
-The first useful Ears prototype should not train a foundation model.
+The next useful Ears step should **not** train a foundation model. It should add pluggable representation adapters for one continuous self-supervised speech encoder and one discrete speech-unit path, then compare them against transcript-only and cheap-prosody controls.
 
-It should build an **evidence-preserving front end** that can take an audio clip and emit synchronized, inspectable representations from multiple channels. That gives us a fair testbed for:
-
-- transcript-only baseline;
-- continuous SSL features;
-- discrete/codec speech units;
-- optional phone/phonological projections;
-- prosodic measurements;
-- fused reasoning over the above.
-
-Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter, or speech-language model.
+Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter training, or speech-language model.
 
 ## Claim boundary
 

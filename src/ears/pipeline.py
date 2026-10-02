@@ -5,6 +5,7 @@ from pathlib import Path
 from .audio import read_wav
 from .features import frame_observations, waveform_references
 from .model import EvidenceTimeline
+from .prosody import prosodic_observations
 
 
 def inspect_wav(
@@ -25,5 +26,7 @@ def inspect_wav(
     for item in waveform_references(buffer):
         timeline.add(item)
     for item in frame_observations(buffer, frame_ms=frame_ms, hop_ms=hop_ms):
+        timeline.add(item)
+    for item in prosodic_observations(buffer, hop_ms=hop_ms):
         timeline.add(item)
     return timeline
