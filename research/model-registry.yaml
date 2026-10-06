@@ -69,9 +69,52 @@ models:
     local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_VERIFIED
     claim_ceiling: SAFE_PROVIDER_ARTIFACT_OBSERVED_SOURCE_ADAPTER_NOT_RUNTIME_EXECUTED
 
+  - id: mimi-semantic
+    provider: kyutai
+    hub: huggingface
+    model_id: kyutai/mimi
+    task: learned-discrete-semantic-unit-baseline
+    upstream_pipeline_tag: feature-extraction
+    adapter: ears.mimi.MimiSemanticUnitAdapter
+    learned: true
+    transcript_required: false
+    required_sample_rate_hz: 24000
+    pinned_revision: 89091b3e466eb6a9d11e537bf26b144f194978f7
+    revision_source:
+      hub_api_sha: 89091b3e466eb6a9d11e537bf26b144f194978f7
+      exact_revision_api_sha: 89091b3e466eb6a9d11e537bf26b144f194978f7
+    observed_config:
+      architectures: [MimiModel]
+      audio_channels: 1
+      sampling_rate: 24000
+      frame_rate_hz: 12.5
+      codebook_size: 2048
+      codebook_dim: 256
+      num_semantic_quantizers: 1
+    library_requirement:
+      transformers_minimum: 4.45.0
+      evidence: Mimi modeling source absent through v4.44.0 and present at v4.45.0
+    load_policy:
+      trust_remote_code: false
+      require_immutable_revision: true
+      use_safetensors: true
+      requested_quantizers: 1
+    observed_artifacts:
+      - config.json
+      - preprocessor_config.json
+      - model.safetensors
+    safetensors_present: true
+    pickle_weight_artifact_present: false
+    safe_runtime_status: SAFE_ARTIFACT_OBSERVED_RUNTIME_NOT_QUALIFIED
+    observed_model_card_url: https://huggingface.co/kyutai/mimi
+    observed_api_url: https://huggingface.co/api/models/kyutai/mimi
+    local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_VERIFIED
+    claim_ceiling: PROVIDER_DECLARED_SEMANTIC_UNIT_NOT_SEMANTIC_UNDERSTANDING
+
 notes:
   - "Registry presence is not installation, download, execution, or model-quality evidence."
   - "The pinned provider revision is immutable source identity, not proof the weights are safe."
   - "Current Ears policy will not silently fall back from safetensors to pickle."
   - "Provider state is an observation at the recorded date and must be refreshed before runtime qualification."
   - "The Wav2Vec2 candidate is ASR-fine-tuned; hidden states are not evidence that non-lexical acoustics survive or are causally used."
+  - "Mimi semantic is the provider architecture label for the selected quantizer; Ears does not treat that label as evidence of semantic understanding."

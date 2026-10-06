@@ -17,7 +17,7 @@ Every core benchmark should compare, where technically possible:
 - **P:** transcript + deterministic prosodic/timing features;
 - **C:** continuous speech representation without transcript;
 - **D0:** deterministic discrete acoustic symbols without transcript (Acoustic Tape control);
-- **D1:** learned discrete speech units without transcript;
+- **D1:** learned discrete speech units without transcript (**V0.8 Mimi semantic-codebook candidate; source implemented, real-model runtime not yet qualified**);
 - **F:** fused acoustic representation + transcript;
 - **A:** richer/raw or reconstruction-capable audio path where feasible.
 

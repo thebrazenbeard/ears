@@ -44,7 +44,7 @@ Implement pluggable channels:
 - one continuous acoustic baseline (**V0.3 log-mel implemented**);
 - one continuous SSL encoder (**V0.7 Wav2Vec2 safe-loading adapter source implemented and exact-provider-bound; local learned runtime qualification still open; V0.5 WavLM remains blocked by pickle-only upstream artifact**);
 - one deterministic discrete acoustic control (**V0.6 Acoustic Tape implemented; not a learned speech-unit path**);
-- one learned discrete speech-unit path;
+- one learned discrete speech-unit path (**V0.8 Mimi provider-declared semantic codebook source implemented and exact-provider-bound; local learned runtime qualification still open**);
 - one ASR path.
 
 Avoid hidden global state. Every derived record must be reproducible from the source artifact plus declared model/version.

@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 from .counterfactual import compare_acoustic_counterfactual
+from .mimi import DEFAULT_MIMI_REVISION, MimiSemanticUnitAdapter
 from .pipeline import inspect_wav
 from .serialization import write_artifact
 from .wav2vec2 import DEFAULT_WAV2VEC2_REVISION, Wav2Vec2Adapter
@@ -48,6 +49,11 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--wav2vec2-device", default="cpu")
     inspect.add_argument("--wav2vec2-pool-frames", type=int, default=5)
     inspect.add_argument("--wav2vec2-max-duration-ms", type=float, default=120_000.0)
+    inspect.add_argument("--mimi-semantic", action="store_true")
+    inspect.add_argument("--mimi-model", default="kyutai/mimi")
+    inspect.add_argument("--mimi-revision", default=DEFAULT_MIMI_REVISION)
+    inspect.add_argument("--mimi-device", default="cpu")
+    inspect.add_argument("--mimi-max-duration-ms", type=float, default=120_000.0)
 
     compare = subparsers.add_parser(
         "compare",
@@ -84,6 +90,19 @@ def main(argv: list[str] | None = None) -> int:
                         device=args.wav2vec2_device,
                         pool_frames=args.wav2vec2_pool_frames,
                         max_duration_ms=args.wav2vec2_max_duration_ms,
+                    )
+                )
+            except (ModelPolicyError, ValueError) as exc:
+                print(f"ears: {exc}", file=sys.stderr)
+                return 2
+        if args.mimi_semantic:
+            try:
+                adapters.append(
+                    MimiSemanticUnitAdapter(
+                        model_id=args.mimi_model,
+                        revision=args.mimi_revision,
+                        device=args.mimi_device,
+                        max_duration_ms=args.mimi_max_duration_ms,
                     )
                 )
             except (ModelPolicyError, ValueError) as exc:

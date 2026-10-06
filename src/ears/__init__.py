@@ -2,6 +2,7 @@
 
 from .acoustic_tape import AcousticTapeAdapter
 from .counterfactual import compare_acoustic_counterfactual
+from .mimi import MimiSemanticUnitAdapter
 from .model import AudioSpan, EvidenceItem, EvidenceKind, EvidenceTimeline
 from .pipeline import inspect_wav
 from .serialization import write_artifact
@@ -16,10 +17,11 @@ __all__ = [
     "EvidenceKind",
     "EvidenceTimeline",
     "inspect_wav",
+    "MimiSemanticUnitAdapter",
     "OptionalDependencyUnavailable",
     "Wav2Vec2Adapter",
     "WavLMAdapter",
     "write_artifact",
 ]
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
