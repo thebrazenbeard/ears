@@ -16,7 +16,8 @@ Every core benchmark should compare, where technically possible:
 - **T:** transcript only;
 - **P:** transcript + deterministic prosodic/timing features;
 - **C:** continuous speech representation without transcript;
-- **D:** discrete speech units without transcript;
+- **D0:** deterministic discrete acoustic symbols without transcript (Acoustic Tape control);
+- **D1:** learned discrete speech units without transcript;
 - **F:** fused acoustic representation + transcript;
 - **A:** richer/raw or reconstruction-capable audio path where feasible.
 
@@ -109,6 +110,7 @@ At minimum:
 - end-to-end and per-stage latency;
 - real-time factor;
 - representation frame/token rate;
+- discrete-stream disagreement/compression behavior under controlled acoustic changes;
 - representation storage/bitrate;
 - compute/memory footprint;
 - speaker-identity leakage where measurable.

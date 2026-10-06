@@ -34,6 +34,31 @@ def _mean_continuous_vector(timeline: EvidenceTimeline) -> list[float] | None:
     ]
 
 
+def _discrete_acoustic_symbols(timeline: EvidenceTimeline) -> list[str]:
+    return [
+        str(item.payload["symbol"])
+        for item in timeline.ordered()
+        if item.kind is EvidenceKind.DISCRETE_ACOUSTIC_SYMBOL
+        and "symbol" in item.payload
+    ]
+
+
+def _aligned_symbol_disagreement_rate(
+    left: list[str],
+    right: list[str],
+) -> float | None:
+    """Linear-time comparison for already time-aligned fixed-hop symbol streams."""
+    if not left and not right:
+        return None
+    overlap = min(len(left), len(right))
+    disagreements = sum(
+        left[index] != right[index]
+        for index in range(overlap)
+    )
+    disagreements += abs(len(left) - len(right))
+    return round(disagreements / max(len(left), len(right)), 6)
+
+
 def _summary(timeline: EvidenceTimeline) -> dict[str, Any]:
     prosody = [
         item
@@ -63,6 +88,10 @@ def _summary(timeline: EvidenceTimeline) -> dict[str, Any]:
             item.kind is EvidenceKind.CONTINUOUS_ACOUSTIC_FEATURE
             for item in timeline.evidence
         ),
+        "discrete_acoustic_symbol_count": sum(
+            item.kind is EvidenceKind.DISCRETE_ACOUSTIC_SYMBOL
+            for item in timeline.evidence
+        ),
     }
 
 
@@ -83,6 +112,8 @@ def compare_acoustic_counterfactual(
     right_summary = _summary(right)
     left_vector = _mean_continuous_vector(left)
     right_vector = _mean_continuous_vector(right)
+    left_symbols = _discrete_acoustic_symbols(left)
+    right_symbols = _discrete_acoustic_symbols(right)
     vector_l2 = None
     if left_vector is not None and right_vector is not None:
         if len(left_vector) == len(right_vector):
@@ -125,6 +156,12 @@ def compare_acoustic_counterfactual(
                 right_summary["median_zero_crossing_rate"],
             ),
             "mean_continuous_vector_l2": vector_l2,
+            "discrete_acoustic_symbol_disagreement_rate": (
+                _aligned_symbol_disagreement_rate(left_symbols, right_symbols)
+            ),
+            "discrete_acoustic_symbol_count_delta": abs(
+                len(left_symbols) - len(right_symbols)
+            ),
         },
         "claim_ceiling": "ACOUSTIC_DIFFERENCE_ONLY_NOT_SEMANTIC_REASONING",
     }

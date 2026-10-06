@@ -107,15 +107,15 @@ Ears starts with seven rules:
 
 ## Current implementation
 
-V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 added a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline. V0.4 added an optional learned WavLM adapter. V0.5 hardens learned-model provenance and audio ingestion: exact model revisions, no remote code, safetensors-only loading, bounded WAV input, same-byte hashing/parsing, and explicit untrusted-audio/control-authority metadata.
+V0.1 established a transcript-free evidence timeline over PCM WAV sources. V0.2 added a cheap YIN-style pitch/voicing baseline and an acoustic-counterfactual comparison harness. V0.3 added a pluggable representation-adapter contract plus a deterministic log-mel continuous acoustic baseline. V0.4 added an optional learned WavLM adapter. V0.5 hardens learned-model provenance and audio ingestion: exact model revisions, no remote code, safetensors-only loading, bounded WAV input, same-byte hashing/parsing, and explicit untrusted-audio/control-authority metadata. V0.6 adds **Acoustic Tape**, a deterministic time-ordered discrete acoustic-symbol stream that tests the low-tech path from sound to machine-readable sequence without first creating text.
 
 The implementation can now preserve source identity, exact time spans, frame-level acoustic measurements, pitch hypotheses, higher-dimensional acoustic vectors, producer/version provenance, and a claim ceiling that prevents a measured acoustic difference from being mislabeled as semantic reasoning.
 
-See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), [Prototype V0.3](docs/prototype-v0.3.md), [Prototype V0.4](docs/prototype-v0.4.md), and [Prototype V0.5](docs/prototype-v0.5.md).
+See [Prototype V0.1](docs/prototype-v0.1.md), [Prototype V0.2](docs/prototype-v0.2.md), [Prototype V0.3](docs/prototype-v0.3.md), [Prototype V0.4](docs/prototype-v0.4.md), [Prototype V0.5](docs/prototype-v0.5.md), and [Prototype V0.6](docs/prototype-v0.6.md).
 
 ## Near-term build target
 
-The next useful Ears step should **not** train a foundation model. The WavLM path is now exact-pinned and safe-loading-only, but the observed Microsoft upstream publishes pickle weights without safetensors, so Ears intentionally blocks that runtime path. The next step is to add a safetensors-backed learned speech encoder and one discrete speech-unit path, then compare both against transcript-only, cheap-prosody, and log-mel controls.
+The next useful Ears step should **not** train a foundation model. The WavLM path is now exact-pinned and safe-loading-only, but the observed Microsoft upstream publishes pickle weights without safetensors, so Ears intentionally blocks that runtime path. V0.6 supplies a deterministic discrete **control**, not the learned speech-unit condition. The next step is still to add a safetensors-backed learned speech encoder and one learned discrete speech-unit path, then compare both against transcript-only, cheap-prosody, log-mel, and Acoustic Tape controls.
 
 Only after those ablations should Ears decide whether it needs its own learned tokenizer, adapter training, or speech-language model.
 

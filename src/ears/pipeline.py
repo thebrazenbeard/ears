@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Sequence
 
+from .acoustic_tape import AcousticTapeAdapter
 from .adapters import EvidenceAdapter, run_adapters
 from .audio import read_wav
 from .features import frame_observations, waveform_references
@@ -34,6 +35,8 @@ def inspect_wav(
     for item in prosodic_observations(buffer, hop_ms=hop_ms):
         timeline.add(item)
     for item in LogMelAdapter(hop_ms=hop_ms).process(buffer):
+        timeline.add(item)
+    for item in AcousticTapeAdapter(hop_ms=hop_ms).process(buffer):
         timeline.add(item)
     for item in run_adapters(buffer, extra_adapters):
         timeline.add(item)
