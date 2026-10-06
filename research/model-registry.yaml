@@ -1,5 +1,5 @@
 schema: ears.model-registry.v1
-as_of: 2026-10-02
+as_of: 2026-10-06
 models:
   - id: wavlm-base-plus
     provider: microsoft
@@ -32,8 +32,46 @@ models:
     local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_PRESENT
     claim_ceiling: SOURCE_ADAPTER_HARDENED_NOT_RUNTIME_EXECUTED
 
+  - id: wav2vec2-base-960h
+    provider: facebook
+    hub: huggingface
+    model_id: facebook/wav2vec2-base-960h
+    task: time-resolved-feature-extraction-baseline
+    upstream_pipeline_tag: automatic-speech-recognition
+    adapter: ears.wav2vec2.Wav2Vec2Adapter
+    learned: true
+    transcript_required: false
+    required_sample_rate_hz: 16000
+    pinned_revision: 22aad52d435eb6dbaf354bdad9b0da84ce7d6156
+    revision_source:
+      hub_api_sha: 22aad52d435eb6dbaf354bdad9b0da84ce7d6156
+      exact_revision_api_sha: 22aad52d435eb6dbaf354bdad9b0da84ce7d6156
+    observed_config:
+      architectures: [Wav2Vec2ForCTC]
+      hidden_size: 768
+      conv_kernel: [10, 3, 3, 3, 3, 2, 2]
+      conv_stride: [5, 2, 2, 2, 2, 2, 2]
+    load_policy:
+      trust_remote_code: false
+      require_immutable_revision: true
+      use_safetensors: true
+    observed_artifacts:
+      - config.json
+      - feature_extractor_config.json
+      - preprocessor_config.json
+      - model.safetensors
+      - pytorch_model.bin
+    safetensors_present: true
+    pickle_pytorch_bin_present: true
+    safe_runtime_status: SAFE_ARTIFACT_OBSERVED_RUNTIME_NOT_QUALIFIED
+    observed_model_card_url: https://huggingface.co/facebook/wav2vec2-base-960h
+    observed_api_url: https://huggingface.co/api/models/facebook/wav2vec2-base-960h
+    local_runtime_status: OPTIONAL_DEPENDENCIES_AND_WEIGHTS_NOT_VERIFIED
+    claim_ceiling: SAFE_PROVIDER_ARTIFACT_OBSERVED_SOURCE_ADAPTER_NOT_RUNTIME_EXECUTED
+
 notes:
   - "Registry presence is not installation, download, execution, or model-quality evidence."
   - "The pinned provider revision is immutable source identity, not proof the weights are safe."
   - "Current Ears policy will not silently fall back from safetensors to pickle."
   - "Provider state is an observation at the recorded date and must be refreshed before runtime qualification."
+  - "The Wav2Vec2 candidate is ASR-fine-tuned; hidden states are not evidence that non-lexical acoustics survive or are causally used."

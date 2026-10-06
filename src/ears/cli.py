@@ -8,6 +8,7 @@ import sys
 from .counterfactual import compare_acoustic_counterfactual
 from .pipeline import inspect_wav
 from .serialization import write_artifact
+from .wav2vec2 import DEFAULT_WAV2VEC2_REVISION, Wav2Vec2Adapter
 from .wavlm import (
     DEFAULT_WAVLM_REVISION,
     ModelPolicyError,
@@ -41,6 +42,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_WAVLM_REVISION,
     )
     inspect.add_argument("--wavlm-device", default="cpu")
+    inspect.add_argument("--wav2vec2", action="store_true")
+    inspect.add_argument("--wav2vec2-model", default="facebook/wav2vec2-base-960h")
+    inspect.add_argument("--wav2vec2-revision", default=DEFAULT_WAV2VEC2_REVISION)
+    inspect.add_argument("--wav2vec2-device", default="cpu")
+    inspect.add_argument("--wav2vec2-pool-frames", type=int, default=5)
+    inspect.add_argument("--wav2vec2-max-duration-ms", type=float, default=120_000.0)
 
     compare = subparsers.add_parser(
         "compare",
@@ -66,6 +73,20 @@ def main(argv: list[str] | None = None) -> int:
                     )
                 )
             except ModelPolicyError as exc:
+                print(f"ears: {exc}", file=sys.stderr)
+                return 2
+        if args.wav2vec2:
+            try:
+                adapters.append(
+                    Wav2Vec2Adapter(
+                        model_id=args.wav2vec2_model,
+                        revision=args.wav2vec2_revision,
+                        device=args.wav2vec2_device,
+                        pool_frames=args.wav2vec2_pool_frames,
+                        max_duration_ms=args.wav2vec2_max_duration_ms,
+                    )
+                )
+            except (ModelPolicyError, ValueError) as exc:
                 print(f"ears: {exc}", file=sys.stderr)
                 return 2
         try:
