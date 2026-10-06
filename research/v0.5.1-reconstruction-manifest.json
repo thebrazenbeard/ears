@@ -1,0 +1,67 @@
+{
+  "base_main_head": "c313c41b2ae53488623d193ef664f1f14504189c",
+  "bound_paths": [
+    {
+      "operation": "UPDATE",
+      "path": "docs/prototype-v0.5.md",
+      "sha256": "4e24b57fab22f2ce2896f12dcb67c18aa027bd229d57081e956d096f4ac45dde"
+    },
+    {
+      "operation": "CREATE",
+      "path": "docs/reviews/seven-internal-security-review-ead0757.md",
+      "sha256": "d8d439e81cc470887f92351370b86e32984041e4dbb063f253b8333d6585522c"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "docs/security-and-provenance-spec-v1.md",
+      "sha256": "f3f6fd458191eade74987cbf6df026708a9c174cd863021bda4e09919717cc8e"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "pyproject.toml",
+      "sha256": "8ad88318493392c735ec25a837f5663e77d54572272c4da64f5c1b189f810de1"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/__init__.py",
+      "sha256": "d1b3c43f09f2381edfc7de980dba109ec423ef1543dd462e02cf96e6deee942f"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "src/ears/audio.py",
+      "sha256": "8e5fc17baa93e4741ff4e636fddd80c752dffc5907a5a45f3f57a9e871a12db4"
+    },
+    {
+      "operation": "UPDATE",
+      "path": "tests/test_security_policy.py",
+      "sha256": "fb518755f191b7edc876335c9bf6f549d162f4848966d268047f0a13f5d94770"
+    }
+  ],
+  "branch": "research/native-acoustic-grounding-v1-20261002",
+  "bt2_method_source": {
+    "four": "archive/training-sources/build-team-2.0/four/v1.0.1",
+    "main_head": "8d9b07d165350c341538be56cdfc919b729fe96b",
+    "repository": "thebrazenbeard/bt2",
+    "review_mode": "INTERNAL_METHOD_LENS_NOT_INDEPENDENT_REVIEW",
+    "seven": "archive/training-sources/project-achilles/seven/v1.0.0"
+  },
+  "exclusions": [
+    "this manifest does not hash itself",
+    "internal Seven review is not independent acceptance",
+    "no learned-model runtime execution occurred"
+  ],
+  "generated_date": "2026-10-02",
+  "predecessor_head": "ead07574b0519ffdfe8f90734338fe41bb0f1899",
+  "repository": "thebrazenbeard/ears",
+  "schema": "ears.four-reconstruction-manifest.v1",
+  "source_set_digest_sha256": "253f7ab9c083c059e80befae7a1d9346c02e6ea72119e96e02e1e540352f076b",
+  "verification_observed_before_manifest": {
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "toctou_mutant": "EXPECTED FAIL; exit 1",
+    "unittest": "24/24 PASS",
+    "wheel": "ears_acoustic-0.5.1-py3-none-any.whl",
+    "wheel_sha256": "313208f74d3cc20a42415985bc56a6aba3dbd555c7f2e330b18ddae82c9b93d2"
+  },
+  "version": "0.5.1"
+}

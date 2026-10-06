@@ -1,0 +1,38 @@
+schema: ears.bt2-role-lenses.v1
+as_of: 2026-10-02
+bt2_repository: thebrazenbeard/bt2
+bt2_main_head: 8d9b07d165350c341538be56cdfc919b729fe96b
+mode: INTERNAL_METHOD_LENS_NOT_INDEPENDENT_REVIEW
+roles:
+  four:
+    source: archive/training-sources/build-team-2.0/four/v1.0.1
+    functions:
+      - documentation_specification_owner
+      - exact_implementation_reconstruction
+      - packaging_manifest_checksum_discipline
+      - provenance_currentness_review
+    applied_to_ears:
+      - exact model revision binding
+      - testable security requirements
+      - bounded changed-path reconstruction
+      - post-change manifest generation
+  seven:
+    source: archive/training-sources/project-achilles/seven/v1.0.0
+    functions:
+      - security_reviewer
+      - hostile_validation_threat_modeling
+      - secure_supply_chain_review
+      - reproducible_security_findings
+    applied_to_ears:
+      - audio injection threat model
+      - learned-model supply-chain review
+      - untrusted audio input boundaries
+      - resource-exhaustion and provenance hostiles
+independence:
+  current_chat_authored_implementation: true
+  four_lens_independent_review: false
+  seven_lens_independent_review: false
+  note: >
+    These role sources are used as disciplined internal review methods.
+    Because the same interaction also authors Ears changes, neither role-lens
+    result is independent acceptance of the resulting bytes.
