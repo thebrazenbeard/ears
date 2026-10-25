@@ -1,0 +1,31 @@
+"""Static safeguards for editor-startup behavior; never execute workspace tasks."""
+
+import json
+from pathlib import Path
+import re
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class EditorStartupSafetyTests(unittest.TestCase):
+    def test_no_automatic_folder_open_task(self):
+        tasks = (ROOT / ".vscode" / "tasks.json").read_text(encoding="utf-8")
+        self.assertIsNone(re.search(r'"runOn"\s*:\s*"folderOpen"', tasks))
+        self.assertIsNone(re.search(r"\bnode\s+[^\n]*public/fonts/", tasks))
+
+    def test_workspace_does_not_claim_control_of_user_automatic_tasks(self):
+        settings = json.loads(
+            (ROOT / ".vscode" / "settings.json").read_text(encoding="utf-8")
+        )
+        # This is a VS Code user/application setting, not a workspace switch.
+        self.assertNotIn("task.allowAutomaticTasks", settings)
+        self.assertNotIn("tasks", settings)
+
+    def test_disguised_executable_font_is_absent(self):
+        self.assertFalse((ROOT / "public/fonts/fa-solid-500.woff2").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
